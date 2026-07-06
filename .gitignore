@@ -1,0 +1,45 @@
+# ── Python ───────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual environments ──────────────────────
+venv/
+env/
+.venv/
+ENV/
+
+# ── Django ────────────────────────────────────
+*.log
+local_settings.py
+staticfiles/
+
+# ── Environment & secrets ─────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Editor / OS ───────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Jupyter ───────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Temp / scratch scripts ────────────────────
+extract_cv.py
+cv_text.py
+update_*.py
+generate_template.py
+append_chat_view.py
+seed_data.py

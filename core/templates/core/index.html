@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <script src="/_sdk/telemetry_sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vasu Chauhan | Full Stack Developer &amp; Computer Engineering Student</title>
+
+  <!-- SEO Optimization -->
+  <meta name="description" content="Portfolio of Vasu Chauhan (Vasukumar Chauhan), a motivated Computer Engineering student at V.V.P. Engineering College, Rajkot. Full Stack Web Developer specializing in Python, Django, and JavaScript.">
+  <meta name="keywords" content="Vasu Chauhan, Vasukumar Chauhan, V.V.P. Engineering College, VVP Rajkot, Computer Engineering Rajkot, Full Stack Developer, Django, Python, JavaScript, Portfolio, Gujarat, India">
+  <meta name="author" content="Vasu Chauhan">
+  <link rel="canonical" href="https://vasuchauhan.me/">
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vasu Chauhan | Full Stack Developer &amp; Computer Engineering Student">
+  <meta property="og:description" content="Computer Engineering student at V.V.P. Engineering College, Rajkot. Specializing in Python, Django, and JavaScript. Explore projects like PathSarthi, SkillNest, and Auto Flex.">
+  <meta property="og:image" content="{% if profile and profile.about_image %}{{ profile.about_image.url }}{% endif %}">
+  <meta property="og:url" content="https://vasuchauhan.me/">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vasu Chauhan | Full Stack Developer &amp; Computer Engineering Student">
+  <meta name="twitter:description" content="Computer Engineering student at V.V.P. Engineering College, Rajkot. Specializing in Python, Django, and JavaScript.">
+
+  <!-- JSON-LD Structured Data Person Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Vasu Chauhan",
+      "alternateName": "Vasukumar Chauhan",
+      "url": "https://vasuchauhan.me/",
+      "jobTitle": "Full Stack Developer",
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "V.V.P. Engineering College, Rajkot",
+        "url": "http://vvpec.ids.co.in/"
+      },
+      "knowsAbout": ["Python", "Django", "JavaScript", "Full Stack Development", "Internet of Things", "SQL"],
+      "sameAs": [
+        "https://github.com/Vasucr01",
+        "https://www.linkedin.com/in/chauhanvasu01/"
+      ]
+    }
+  </script>
+
+  <!-- Tailwind, Lucide, Three.js, Google Fonts -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:wght@700;900&amp;display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+    h1, h2, h3 { font-family: 'Fraunces', serif; }
+
+    /* ── Reveal animations ── */
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Glow line ── */
+    .glow-line { height: 2px; background: linear-gradient(90deg, transparent, #a855f7, transparent); animation: glowPulse 3s infinite; }
+    @keyframes glowPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* ── Masonry grid ── */
+    .masonry { columns: 1; column-gap: 1.25rem; }
+    @media(min-width: 480px)  { .masonry { columns: 2; } }
+    @media(min-width: 768px)  { .masonry { columns: 2; } }
+    @media(min-width: 1024px) { .masonry { columns: 3; } }
+    .masonry-item { break-inside: avoid; margin-bottom: 1.25rem; }
+
+    /* ── Project card 3D tilt ── */
+    .project-card {
+      transition: transform 0.12s ease-out, box-shadow 0.35s;
+      will-change: transform;
+      transform-style: preserve-3d;
+    }
+    .project-card:hover { box-shadow: 0 20px 60px rgba(168,85,247,0.3); }
+
+    /* ── Chat panel ── */
+    .chat-panel { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .chat-panel.open { max-height: 500px; }
+
+    /* ── Modal ── */
+    .modal-backdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+    .modal-content {
+      transform: scale(0.9) translateY(20px);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+    }
+    .modal-backdrop.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+
+    /* ── Skill bars ── */
+    .skill-bar-fill { transition: width 1.2s cubic-bezier(.4,0,.2,1); width: 0; }
+
+    /* ── Mobile hamburger ── */
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: flex; }
+
+    /* ── Hero gradient text ── */
+    .gradient-text {
+      background: linear-gradient(135deg, #fff 0%, #e2e8f0 40%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Smooth 3D canvas ── */
+    #three-container canvas { display: block; }
+
+    /* ── Prevent layout shift from fixed nav ── */
+    .nav-spacer { height: 65px; }
+
+    /* ── Touch-safe card tilt reset ── */
+    @media (hover: none) {
+      .project-card { transform: none !important; }
+    }
+
+    /* ── About image responsive ── */
+    .about-img {
+      width: clamp(10rem, 40vw, 14rem);
+      height: clamp(10rem, 40vw, 14rem);
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/resizing_sdk.js" type="text/javascript"></script>
+ </head>
+
+ <body data-template-id="__page-root" class="min-h-screen text-gray-100 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+
+  <!-- Ambient background blobs -->
+  <div class="fixed top-0 left-0 w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0"></div>
+  <div class="fixed bottom-0 right-0 w-[500px] h-[500px] bg-fuchsia-900/10 rounded-full blur-[90px] translate-x-1/3 translate-y-1/3 pointer-events-none z-0"></div>
+
+  <!-- ────────────────── NAV ────────────────── -->
+  <nav class="fixed top-0 w-full z-50 bg-gray-950/85 backdrop-blur-md border-b border-gray-800/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+      <!-- Logo -->
+      <span data-template-id="nav-logo" class="canva-text font-bold text-lg sm:text-xl text-white">
+        {% if profile %}{{ profile.name }}{% else %}Vasu Chauhan{% endif %}
+      </span>
+
+      <!-- Desktop links -->
+      <div class="hidden md:flex gap-6 lg:gap-8 text-sm font-medium text-gray-300">
+        <a href="#about"   class="hover:text-purple-400 transition-colors duration-200">About</a>
+        <a href="#skills"  class="hover:text-purple-400 transition-colors duration-200">Skills</a>
+        <a href="#projects" class="hover:text-purple-400 transition-colors duration-200">Work</a>
+        <a href="#connect" class="hover:text-purple-400 transition-colors duration-200">Connect</a>
+        <a href="#contact" class="hover:text-purple-400 transition-colors duration-200">Contact</a>
+      </div>
+
+      <!-- Mobile hamburger button -->
+      <button id="hamburger-btn" aria-label="Toggle menu" class="md:hidden flex flex-col gap-[5px] p-2 rounded-lg hover:bg-gray-800 transition">
+        <span class="w-5 h-0.5 bg-gray-300 block transition-all duration-300" id="hb-1"></span>
+        <span class="w-5 h-0.5 bg-gray-300 block transition-all duration-300" id="hb-2"></span>
+        <span class="w-5 h-0.5 bg-gray-300 block transition-all duration-300" id="hb-3"></span>
+      </button>
+    </div>
+
+    <!-- Mobile dropdown menu -->
+    <div id="mobile-menu" class="md:hidden flex-col bg-gray-950/98 border-t border-gray-800/60 px-4 py-4 gap-1">
+      <a href="#about"    onclick="closeMobileMenu()" class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">About</a>
+      <a href="#skills"   onclick="closeMobileMenu()" class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Skills</a>
+      <a href="#projects" onclick="closeMobileMenu()" class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Work</a>
+      <a href="#connect"  onclick="closeMobileMenu()" class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Connect</a>
+      <a href="#contact"  onclick="closeMobileMenu()" class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Contact</a>
+    </div>
+  </nav>
+  <div class="nav-spacer"></div>
+
+  <!-- ────────────────── HERO ────────────────── -->
+  <header class="relative w-full overflow-hidden bg-gradient-to-b from-gray-950 to-gray-900 min-h-[calc(100svh-65px)] flex items-center">
+    <!-- Grid background -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:28px_28px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-0 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+      <!-- LEFT: Text content -->
+      <div class="lg:col-span-7 text-left space-y-4 sm:space-y-5 flex flex-col justify-center">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold w-fit tracking-wider uppercase">
+          🚀 Portfolio &amp; Professional CV
+        </div>
+
+        <!-- Main heading -->
+        <h1 data-template-id="hero-title" class="canva-text gradient-text font-black leading-[1.05] text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          {% if profile %}{{ profile.hero_title }}{% else %}Welcome{% endif %}
+        </h1>
+
+        <!-- Subtitle -->
+        <p data-template-id="hero-subtitle" class="canva-text text-base sm:text-lg md:text-xl text-gray-300 font-medium">
+          {% if profile %}{{ profile.hero_subtitle }}{% else %}I build things.{% endif %}
+        </p>
+
+        <!-- Description -->
+        <p class="text-gray-400 text-sm sm:text-base leading-relaxed max-w-lg">
+          Computer Engineering student at <strong class="text-gray-200">V.V.P. Engineering College, Rajkot</strong>. Specializing in Python, Django, JavaScript &amp; IoT. Explore my work below.
+        </p>
+
+        <!-- CTA buttons -->
+        <div class="flex flex-wrap gap-3 sm:gap-4 pt-2">
+          <a href="#projects" data-template-id="hero-cta" class="canva-button px-6 sm:px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/25 bg-purple-600 hover:bg-purple-500 text-white flex items-center gap-2 text-sm sm:text-base">
+            <span>Explore Projects</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 shrink-0"></i>
+          </a>
+          {% if profile and profile.cv_file %}
+          <a href="{{ profile.cv_file.url }}" class="canva-button px-6 sm:px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 hover:bg-gray-800 border border-purple-500/40 text-purple-300 hover:text-white flex items-center gap-2 text-sm sm:text-base" download>
+            <i data-lucide="download" class="w-4 h-4 shrink-0"></i>
+            <span>Download CV</span>
+          </a>
+          {% endif %}
+        </div>
+
+        <!-- Mobile tech chips -->
+        <div class="flex flex-wrap gap-2 pt-1 lg:hidden">
+          <span class="px-2.5 py-1 rounded-full bg-gray-800/70 border border-gray-700/50 text-gray-400 text-xs">Python</span>
+          <span class="px-2.5 py-1 rounded-full bg-gray-800/70 border border-gray-700/50 text-gray-400 text-xs">Django</span>
+          <span class="px-2.5 py-1 rounded-full bg-gray-800/70 border border-gray-700/50 text-gray-400 text-xs">JavaScript</span>
+          <span class="px-2.5 py-1 rounded-full bg-gray-800/70 border border-gray-700/50 text-gray-400 text-xs">IoT</span>
+          <span class="px-2.5 py-1 rounded-full bg-gray-800/70 border border-gray-700/50 text-gray-400 text-xs">SQL</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: 3D canvas — hidden on phones, shown md+ -->
+      <div class="hidden sm:flex lg:col-span-5 justify-center items-center relative h-[300px] md:h-[380px] lg:h-[460px]">
+        <div class="absolute inset-0 bg-purple-500/5 rounded-full blur-[70px] pointer-events-none"></div>
+        <div id="three-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="glow-line w-full"></div>
+
+  <!-- ────────────────── MAIN ────────────────── -->
+  <main class="w-full overflow-x-hidden">
+
+    <!-- ABOUT -->
+    <section id="about" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 reveal">
+      <div class="flex flex-col sm:flex-row items-center gap-8 sm:gap-10 lg:gap-14">
+        <img data-template-id="about-portrait"
+          src="{% if profile and profile.about_image %}{{ profile.about_image.url }}{% else %}https://via.placeholder.com/256{% endif %}"
+          class="canva-image about-img rounded-2xl object-cover shadow-2xl flex-shrink-0"
+          loading="lazy" alt="Vasu Chauhan profile photo">
+        <div>
+          <h2 data-template-id="about-heading" class="canva-text font-bold text-2xl sm:text-3xl">
+            {% if profile %}{{ profile.about_heading }}{% else %}About Me{% endif %}
+          </h2>
+          <p data-template-id="about-text" class="canva-text mt-4 text-gray-300 leading-relaxed text-sm sm:text-base">
+            {% if profile %}{{ profile.about_text }}{% else %}I am a student.{% endif %}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+      <h2 data-template-id="projects-heading" class="canva-text text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-14 reveal">Projects</h2>
+      <div class="masonry">
+        {% for project in projects %}
+        <div class="masonry-item reveal">
+          <div class="project-card-wrapper cursor-pointer"
+            onclick="openProjectModal('{{ project.title|escapejs }}', '{% if project.image %}{{ project.image.url|escapejs }}{% elif project.image_url %}{{ project.image_url|escapejs }}{% else %}https://via.placeholder.com/800{% endif %}', '{{ project.description|escapejs }}', '{{ project.tech|escapejs }}', '{{ project.impact|escapejs }}')">
+            <div class="canva-card project-card rounded-2xl overflow-hidden bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 hover:border-purple-500/30 transition-colors duration-300">
+              <div class="relative overflow-hidden">
+                <img src="{% if project.image %}{{ project.image.url }}{% elif project.image_url %}{{ project.image_url }}{% else %}https://via.placeholder.com/800{% endif %}"
+                  class="canva-image w-full h-44 sm:h-48 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" alt="{{ project.title }}">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent pointer-events-none"></div>
+              </div>
+              <div class="p-4 sm:p-5">
+                <h3 class="canva-text font-bold text-lg sm:text-xl text-white">{{ project.title }}</h3>
+                <p class="canva-text text-xs sm:text-sm mt-1.5 text-purple-400 font-medium">{{ project.tech }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-gray-400 col-span-full">No projects added yet.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+      <h2 data-template-id="skills-heading" class="canva-text text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-14 reveal">Skills</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 reveal" id="skills-container">
+        {% for skill in skills %}
+        <div class="skill-row">
+          <div class="flex justify-between mb-2">
+            <span class="canva-text text-sm font-semibold text-gray-200">{{ skill.name }}</span>
+            <span class="text-purple-400 text-sm font-bold">{{ skill.percentage }}%</span>
+          </div>
+          <div class="w-full h-2 bg-gray-800/60 rounded-full overflow-hidden border border-gray-700/40">
+            <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-purple-500 to-fuchsia-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]"
+              data-level="{{ skill.percentage }}"></div>
+          </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-gray-400 col-span-2">No skills added yet.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- CONNECT -->
+    <section id="connect" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 reveal">
+      <h2 class="canva-text text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-12">Get Connected</h2>
+      <div class="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
+        {% if profile.instagram_url %}
+        <a href="{{ profile.instagram_url }}" target="_blank" rel="noopener"
+          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/50 backdrop-blur-sm border border-pink-500/30 rounded-2xl hover:bg-pink-900/30 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-pink-400 min-w-[130px] justify-center">
+          <i data-lucide="instagram" class="w-5 h-5 shrink-0"></i>
+          <span class="font-semibold text-white text-sm sm:text-base">Instagram</span>
+        </a>
+        {% endif %}
+        {% if profile.linkedin_url %}
+        <a href="{{ profile.linkedin_url }}" target="_blank" rel="noopener"
+          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/50 backdrop-blur-sm border border-blue-500/30 rounded-2xl hover:bg-blue-900/30 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-blue-400 min-w-[130px] justify-center">
+          <i data-lucide="linkedin" class="w-5 h-5 shrink-0"></i>
+          <span class="font-semibold text-white text-sm sm:text-base">LinkedIn</span>
+        </a>
+        {% endif %}
+        {% if profile.github_url %}
+        <a href="{{ profile.github_url }}" target="_blank" rel="noopener"
+          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/50 backdrop-blur-sm border border-gray-500/30 rounded-2xl hover:bg-gray-700/50 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-gray-300 min-w-[130px] justify-center">
+          <i data-lucide="github" class="w-5 h-5 shrink-0"></i>
+          <span class="font-semibold text-white text-sm sm:text-base">GitHub</span>
+        </a>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 reveal">
+      <h2 data-template-id="contact-heading" class="canva-text text-center text-2xl sm:text-3xl font-bold mb-8">Get In Touch</h2>
+      <form id="contact-form" class="space-y-5">
+        <div>
+          <label data-template-id="contact-name-label" for="c-name" class="canva-text block text-sm font-medium mb-2 text-gray-300">Name</label>
+          <input id="c-name" type="text" data-template-id="contact-name-input"
+            class="canva-input w-full px-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 transition-colors duration-200"
+            placeholder="Your name">
+        </div>
+        <div>
+          <label data-template-id="contact-email-label" for="c-email" class="canva-text block text-sm font-medium mb-2 text-gray-300">Email</label>
+          <input id="c-email" type="email" data-template-id="contact-email-input"
+            class="canva-input w-full px-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 transition-colors duration-200"
+            placeholder="your@email.com">
+        </div>
+        <div>
+          <label data-template-id="contact-msg-label" for="c-msg" class="canva-text block text-sm font-medium mb-2 text-gray-300">Message</label>
+          <textarea id="c-msg" rows="4"
+            class="w-full px-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 resize-none transition-colors duration-200"
+            placeholder="Hello Vasu, I'd love to connect..."></textarea>
+        </div>
+        <button data-template-id="contact-submit" type="submit"
+          class="canva-button w-full py-3.5 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-500/20 bg-purple-600 hover:bg-purple-500 text-white text-sm sm:text-base">
+          Send Message
+        </button>
+      </form>
+      <p id="form-success" class="hidden mt-5 text-center text-green-400 font-medium text-sm">
+        ✅ Message sent! I'll get back to you soon.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ────────────────── PROJECT MODAL ────────────────── -->
+  <div id="project-modal" class="modal-backdrop fixed inset-0 bg-black/75 backdrop-blur-sm z-40 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="modal-content bg-gray-900 rounded-t-3xl sm:rounded-3xl w-full sm:max-w-2xl max-h-[92vh] sm:max-h-[85vh] overflow-y-auto border-t sm:border border-gray-700">
+      <div class="sticky top-0 px-5 sm:px-6 py-4 sm:py-5 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-3xl">
+        <h3 id="modal-title" class="text-xl sm:text-2xl font-bold text-white pr-4"></h3>
+        <button onclick="closeProjectModal()" class="text-gray-400 hover:text-white transition p-1 shrink-0">
+          <i data-lucide="x" style="width:22px;height:22px"></i>
+        </button>
+      </div>
+      <div class="p-5 sm:p-6 space-y-5 sm:space-y-6">
+        <img id="modal-image" class="w-full h-52 sm:h-64 object-cover rounded-2xl" alt="">
+        <div>
+          <h4 class="text-xs font-semibold text-purple-400 mb-2 tracking-wider">OVERVIEW</h4>
+          <p id="modal-description" class="text-gray-300 leading-relaxed text-sm sm:text-base"></p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 bg-gray-800/50 rounded-xl border border-gray-700/40">
+            <h4 class="text-xs font-semibold text-purple-400 mb-2 tracking-wider">TECHNOLOGIES</h4>
+            <p id="modal-tech" class="text-gray-300 text-sm"></p>
+          </div>
+          <div class="p-4 bg-gray-800/50 rounded-xl border border-gray-700/40">
+            <h4 class="text-xs font-semibold text-purple-400 mb-2 tracking-wider">IMPACT</h4>
+            <p id="modal-impact" class="text-gray-300 text-sm"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────── FOOTER ────────────────── -->
+  <footer class="w-full border-t border-gray-800/60 py-6 sm:py-8 text-center px-4">
+    <p data-template-id="footer-text" class="canva-text text-xs sm:text-sm text-gray-500">
+      &copy; 2026 Vasu Chauhan. All rights reserved &middot; V.V.P. Engineering College, Rajkot
+    </p>
+  </footer>
+
+  <!-- ────────────────── CHATBOT ────────────────── -->
+  <div id="chatbot" class="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50">
+    <!-- Panel — full width on mobile, fixed on larger screens -->
+    <div class="chat-panel bg-gray-900 border border-gray-700 rounded-2xl mb-3 shadow-2xl
+      w-[calc(100vw-2rem)] max-w-xs sm:w-80">
+      <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+        <span data-template-id="chat-title" class="canva-text font-semibold text-sm">
+          💬 Ask Vasu's AI
+        </span>
+        <button onclick="toggleChat()" class="text-gray-400 hover:text-white p-1">
+          <i data-lucide="x" style="width:16px;height:16px"></i>
+        </button>
+      </div>
+      <div id="chat-messages" class="p-4 space-y-3 max-h-52 sm:max-h-60 overflow-y-auto">
+        <div class="bg-purple-900/40 rounded-xl px-3 py-2 text-sm max-w-[85%]">
+          Hi! 👋 Ask me about Vasu's projects or skills!
+        </div>
+      </div>
+      <div class="p-3 border-t border-gray-700 flex gap-2">
+        <input id="chat-input" type="text" placeholder="Type a message..."
+          class="flex-1 px-3 py-2 rounded-lg bg-gray-800/60 border border-gray-700 text-sm text-white focus:outline-none focus:border-purple-500 transition-colors min-w-0">
+        <button onclick="sendChat()" class="px-3 py-2 bg-purple-600 rounded-lg hover:bg-purple-500 transition shrink-0">
+          <i data-lucide="send" style="width:16px;height:16px"></i>
+        </button>
+      </div>
+    </div>
+    <button onclick="toggleChat()" id="chat-toggle"
+      class="w-13 h-13 sm:w-14 sm:h-14 bg-purple-600 rounded-full flex items-center justify-center shadow-lg shadow-purple-900/40 hover:bg-purple-500 transition-all duration-300 hover:scale-110 ml-auto"
+      style="width:52px;height:52px">
+      <i data-lucide="message-circle" style="width:22px;height:22px"></i>
+    </button>
+  </div>
+
+  <script src="/_sdk/editing_sdk.js"></script>
+  <script>
+    // ── Mobile nav ──────────────────────────────────
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hb1 = document.getElementById('hb-1');
+    const hb2 = document.getElementById('hb-2');
+    const hb3 = document.getElementById('hb-3');
+    let menuOpen = false;
+
+    hamburgerBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('open', menuOpen);
+      // Animate to X
+      if (menuOpen) {
+        hb1.style.transform = 'translateY(7px) rotate(45deg)';
+        hb2.style.opacity = '0';
+        hb3.style.transform = 'translateY(-7px) rotate(-45deg)';
+      } else {
+        hb1.style.transform = '';
+        hb2.style.opacity = '';
+        hb3.style.transform = '';
+      }
+    });
+
+    function closeMobileMenu() {
+      menuOpen = false;
+      mobileMenu.classList.remove('open');
+      hb1.style.transform = '';
+      hb2.style.opacity = '';
+      hb3.style.transform = '';
+    }
+
+    // ── Dynamic viewport height (iOS Safari fix) ────
+    function setVh() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    setVh();
+    window.addEventListener('resize', setVh);
+
+    // ── 3D Three.js WebGL Visualization ─────────────
+    (function() {
+      const container = document.getElementById('three-container');
+      if (!container || typeof THREE === 'undefined') return;
+
+      let scene, camera, renderer, icosahedron, particleGroup;
+      let width = container.offsetWidth;
+      let height = container.offsetHeight;
+      let targetRotationX = 0, targetRotationY = 0;
+      let mouseX = 0, mouseY = 0;
+      let windowHalfX = width / 2;
+      let windowHalfY = height / 2;
+      let isAnimating = true;
+
+      function init() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+        camera.position.z = 8;
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Outer wireframe icosahedron
+        const geometry = new THREE.IcosahedronGeometry(2, 1);
+        const wireframeGeom = new THREE.WireframeGeometry(geometry);
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.85 });
+        icosahedron = new THREE.LineSegments(wireframeGeom, lineMaterial);
+        scene.add(icosahedron);
+
+        // Inner fuchsia core
+        const innerGeom = new THREE.IcosahedronGeometry(1.8, 0);
+        const innerMat = new THREE.MeshBasicMaterial({ color: 0xec4899, wireframe: true, transparent: true, opacity: 0.2 });
+        icosahedron.add(new THREE.Mesh(innerGeom, innerMat));
+
+        // Particle orbit
+        particleGroup = new THREE.Group();
+        const pGeometry = new THREE.BufferGeometry();
+        const particleCount = 100;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        const colorPurple = new THREE.Color(0xa855f7);
+        const colorFuchsia = new THREE.Color(0xec4899);
+
+        for (let i = 0; i < particleCount; i++) {
+          const r = 2.4 + Math.random() * 1.6;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos((Math.random() * 2) - 1);
+          positions[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+          positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+          positions[i*3+2] = r * Math.cos(phi);
+          const mc = colorPurple.clone().lerp(colorFuchsia, Math.random());
+          colors[i*3] = mc.r; colors[i*3+1] = mc.g; colors[i*3+2] = mc.b;
+        }
+
+        pGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        pGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const cv = document.createElement('canvas');
+        cv.width = cv.height = 16;
+        const cx = cv.getContext('2d');
+        const gr = cx.createRadialGradient(8,8,0,8,8,8);
+        gr.addColorStop(0,'rgba(255,255,255,1)');
+        gr.addColorStop(1,'rgba(255,255,255,0)');
+        cx.fillStyle = gr; cx.fillRect(0,0,16,16);
+
+        const pMaterial = new THREE.PointsMaterial({
+          size: 0.16, map: new THREE.CanvasTexture(cv),
+          vertexColors: true, transparent: true, opacity: 0.9,
+          blending: THREE.AdditiveBlending, depthWrite: false
+        });
+
+        particleGroup.add(new THREE.Points(pGeometry, pMaterial));
+        scene.add(particleGroup);
+
+        container.addEventListener('mousemove', onMouseMove);
+        container.addEventListener('mouseleave', onMouseLeave);
+        window.addEventListener('resize', onWindowResize);
+
+        // Pause when off-screen to save resources
+        new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            isAnimating = e.isIntersecting;
+            if (isAnimating) animate();
+          });
+        }, { threshold: 0.05 }).observe(container);
+      }
+
+      function onMouseMove(e) {
+        const rect = container.getBoundingClientRect();
+        mouseX = (e.clientX - rect.left - windowHalfX) * 0.005;
+        mouseY = (e.clientY - rect.top  - windowHalfY) * 0.005;
+      }
+      function onMouseLeave() { mouseX = 0; mouseY = 0; }
+
+      function onWindowResize() {
+        width  = container.offsetWidth;
+        height = container.offsetHeight;
+        windowHalfX = width / 2;
+        windowHalfY = height / 2;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      }
+
+      function animate() {
+        if (!isAnimating) return;
+        requestAnimationFrame(animate);
+        icosahedron.rotation.y  += 0.003;
+        icosahedron.rotation.x  += 0.001;
+        particleGroup.rotation.y -= 0.0015;
+        targetRotationX += (mouseY - targetRotationX) * 0.05;
+        targetRotationY += (mouseX - targetRotationY) * 0.05;
+        icosahedron.rotation.x    += targetRotationX * 0.1;
+        icosahedron.rotation.y    += targetRotationY * 0.1;
+        particleGroup.rotation.x  += targetRotationX * 0.05;
+        particleGroup.rotation.y  += targetRotationY * 0.05;
+        renderer.render(scene, camera);
+      }
+
+      init();
+    })();
+
+    // ── 3D Tilt on project cards (desktop only) ──────
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.querySelectorAll('.project-card-wrapper').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const xc = rect.width  / 2;
+          const yc = rect.height / 2;
+          const angleX = (yc - y) / yc * 8;
+          const angleY = (x - xc) / xc * 8;
+          const inner = card.querySelector('.project-card');
+          if (inner) inner.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-4px) scale(1.02)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          const inner = card.querySelector('.project-card');
+          if (inner) inner.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+        });
+      });
+    }
+
+    // ── Skill bar animations ─────────────────────────
+    const skillObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+            bar.style.width = bar.dataset.level + '%';
+          });
+          skillObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    const skillsContainer = document.getElementById('skills-container');
+    if (skillsContainer) skillObserver.observe(skillsContainer);
+
+    // ── Project modal ────────────────────────────────
+    function openProjectModal(title, image, description, tech, impact) {
+      document.getElementById('modal-title').textContent       = title;
+      document.getElementById('modal-image').src              = image;
+      document.getElementById('modal-image').alt              = title;
+      document.getElementById('modal-description').textContent = description;
+      document.getElementById('modal-tech').textContent        = tech;
+      document.getElementById('modal-impact').textContent      = impact;
+      document.getElementById('project-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeProjectModal() {
+      document.getElementById('project-modal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    document.getElementById('project-modal').addEventListener('click', e => {
+      if (e.target.id === 'project-modal') closeProjectModal();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProjectModal(); });
+
+    // ── Scroll reveal ────────────────────────────────
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          e.target.style.transitionDelay = `${i * 0.07}s`;
+          e.target.classList.add('visible');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── Contact form ─────────────────────────────────
+    document.getElementById('contact-form').addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('form-success').classList.remove('hidden');
+      e.target.reset();
+    });
+
+    // ── Chatbot ──────────────────────────────────────
+    function toggleChat() { document.querySelector('.chat-panel').classList.toggle('open'); }
+
+    async function sendChat() {
+      const input = document.getElementById('chat-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+      const c = document.getElementById('chat-messages');
+      c.innerHTML += `<div class="bg-gray-700 rounded-xl px-3 py-2 text-sm ml-auto max-w-[85%] mb-2">${msg}</div>`;
+      input.value = '';
+      c.scrollTop = c.scrollHeight;
+      const typingId = 'typing-' + Date.now();
+      c.innerHTML += `<div id="${typingId}" class="bg-purple-900/40 border border-purple-500/30 rounded-xl px-3 py-2 text-sm max-w-[85%] mb-2 animate-pulse">...</div>`;
+      c.scrollTop = c.scrollHeight;
+      try {
+        const response = await fetch('/chat/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg })
+        });
+        const data = await response.json();
+        document.getElementById(typingId).remove();
+        c.innerHTML += `<div class="bg-purple-900/40 border border-purple-500/30 rounded-xl px-3 py-2 text-sm max-w-[85%] mb-2">${data.reply}</div>`;
+        c.scrollTop = c.scrollHeight;
+      } catch(err) {
+        document.getElementById(typingId).remove();
+        c.innerHTML += `<div class="bg-red-900/40 text-red-300 rounded-xl px-3 py-2 text-sm max-w-[85%] mb-2">Error connecting to server.</div>`;
+      }
+    }
+    document.getElementById('chat-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); sendChat(); }
+    });
+
+    lucide.createIcons();
+  </script>
+ </body>
+</html>
