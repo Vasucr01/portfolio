@@ -20,7 +20,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # DEBUG = False in production (set via env var)
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
