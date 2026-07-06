@@ -1,33 +1,47 @@
 """
 Django settings for my_portfolio project.
-Production-ready configuration with Vercel deployment support.
+Production-ready configuration with Vercel + Cloudinary support.
 """
 
 import os
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ─────────────────────────────────────────────────────────────
+# CLOUDINARY – must be configured BEFORE DEFAULT_FILE_STORAGE
+# ─────────────────────────────────────────────────────────────
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME', 'dnepjqt2a'),
+    api_key=os.getenv('CLOUDINARY_API_KEY', '873738662476657'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET', 'fBXjPFJk3ZgyvQz0PZSi-TAjEaY'),
+    secure=True,
+)
+
+# All uploaded files go to Cloudinary (not the local filesystem)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/media/'
+
+# ─────────────────────────────────────────────────────────────
 # SECURITY
 # ─────────────────────────────────────────────────────────────
-# Read SECRET_KEY from environment variable in production;
-# fall back to dev key locally.
 SECRET_KEY = os.environ.get(
     'SECRET_KEY',
     'django-insecure-ku)6!xmw*f6(0n390($vk8e-@ls9&o+01lw-wt1@#(n=eu2*y'
 )
 
-# DEBUG = False in production (set via env var)
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '.vercel.app',          # all *.vercel.app subdomains
+    '.vercel.app',
     '.now.sh',
-    'vasuchauhan.me',       # custom domain (if configured)
+    'vasuchauhan.me',
     'www.vasuchauhan.me',
 ]
 
@@ -42,11 +56,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
+    'my_portfolio.exception_middleware.ExceptionLoggingMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # WhiteNoise must be right after SecurityMiddleware for static file serving
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,9 +93,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'my_portfolio.wsgi.application'
 
 # ─────────────────────────────────────────────────────────────
-# DATABASE
-# Uses Neon PostgreSQL in production (via DATABASE_URL env var).
-# Falls back to local SQLite for development.
+# DATABASE – Neon PostgreSQL via DATABASE_URL env var
 # ─────────────────────────────────────────────────────────────
 import dj_database_url
 
@@ -112,25 +126,7 @@ USE_TZ = True
 # STATIC FILES  (WhiteNoise serves them on Vercel)
 # ─────────────────────────────────────────────────────────────
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ─────────────────────────────────────────────────────────────
-# MEDIA FILES
-# Note: Vercel's filesystem is read-only in production.
-# Uploaded files (profile images, CV) are committed to the repo
-# and served via MEDIA_ROOT. For dynamic uploads in production,
-# use Cloudinary or an S3-compatible service.
-# ─────────────────────────────────────────────────────────────
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# ─────────────────────────────────────────────────────────────
-# DEFAULT PRIMARY KEY
-# ─────────────────────────────────────────────────────────────
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# ─────────────────────────────────────────────────────────────
-# GEMINI API KEY  (set as env var in Vercel dashboard)
-# ─────────────────────────────────────────────────────────────
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')

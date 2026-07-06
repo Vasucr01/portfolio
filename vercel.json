@@ -16,5 +16,11 @@
       "dest": "my_portfolio/wsgi.py"
     }
   ],
-  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
+  "env": {
+    "CLOUDINARY_URL": "cloudinary://873738662476657:fBXjPFJk3ZgyvQz0PZSi-TAjEaY@dnepjqt2a",
+    "CLOUDINARY_CLOUD_NAME": "dnepjqt2a",
+    "CLOUDINARY_API_KEY": "873738662476657",
+    "CLOUDINARY_API_SECRET": "fBXjPFJk3ZgyvQz0PZSi-TAjEaY"
+  }
 }

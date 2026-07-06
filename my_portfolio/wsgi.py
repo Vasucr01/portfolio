@@ -8,6 +8,11 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 """
 
 import os
+from pathlib import Path
+# Ensure writable media directory exists on Vercel
+if os.getenv('VERCEL') == '1':
+    Path('/tmp/media').mkdir(parents=True, exist_ok=True)
+
 
 from django.core.wsgi import get_wsgi_application
 
