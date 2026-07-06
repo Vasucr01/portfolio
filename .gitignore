@@ -18,7 +18,6 @@ ENV/
 # ── Django ────────────────────────────────────
 *.log
 local_settings.py
-staticfiles/
 
 # ── Environment & secrets ─────────────────────
 .env

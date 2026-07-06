@@ -78,16 +78,16 @@ WSGI_APPLICATION = 'my_portfolio.wsgi.application'
 
 # ─────────────────────────────────────────────────────────────
 # DATABASE
-# Vercel doesn't support persistent SQLite writes, so we ship
-# the pre-seeded db.sqlite3 in the repo for read operations.
-# For full write support in production, swap to a hosted DB
-# (e.g. Neon, PlanetScale, Supabase) via DATABASE_URL env var.
+# Uses Neon PostgreSQL in production (via DATABASE_URL env var).
+# Falls back to local SQLite for development.
 # ─────────────────────────────────────────────────────────────
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        conn_max_age=600,
+    )
 }
 
 # ─────────────────────────────────────────────────────────────
