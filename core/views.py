@@ -9,10 +9,14 @@ def get_client_ip(request):
     return request.META.get('REMOTE_ADDR')
 
 def index(request):
-    # Log visitor
-    ip = get_client_ip(request)
-    ua = request.META.get('HTTP_USER_AGENT', '')
-    Visitor.objects.create(ip_address=ip, user_agent=ua, path=request.path)
+    # Log visitor (fail silently if database is read-only, e.g. on serverless Vercel)
+    try:
+        ip = get_client_ip(request)
+        ua = request.META.get('HTTP_USER_AGENT', '')
+        Visitor.objects.create(ip_address=ip, user_agent=ua, path=request.path)
+    except Exception as e:
+        # DB is read-only in production serverless, skip logging
+        pass
 
     profile = Profile.objects.first()
     skills = Skill.objects.all()
