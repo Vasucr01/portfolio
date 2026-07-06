@@ -20,7 +20,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # DEBUG = False in production (set via env var)
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -85,7 +85,7 @@ import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        default='postgresql://neondb_owner:npg_8MmTj9WhRcdG@ep-curly-art-atp41epa-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require',
         conn_max_age=600,
     )
 }
