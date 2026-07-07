@@ -9,7 +9,7 @@
 
   <!-- SEO Optimization -->
   <meta name="description"
-    content="Portfolio of Vasu Chauhan (Vasukumar Chauhan), a motivated Computer Engineering student at V.V.P. Engineering College, Rajkot. Full Stack Web Developer specializing in Python, Django, and JavaScript.">
+    content="Portfolio of Vasu Chauhan, a motivated Computer Engineering student at V.V.P. Engineering College, Rajkot. Full Stack Web Developer specializing in Python, Django, and JavaScript.">
   <meta name="keywords"
     content="Vasu Chauhan, Vasukumar Chauhan, V.V.P. Engineering College, VVP Rajkot, Computer Engineering Rajkot, Full Stack Developer, Django, Python, JavaScript, Portfolio, Gujarat, India">
   <meta name="author" content="Vasu Chauhan">
@@ -21,7 +21,7 @@
   <meta property="og:title" content="Vasu Chauhan | Full Stack Developer &amp; Computer Engineering Student">
   <meta property="og:description"
     content="Computer Engineering student at V.V.P. Engineering College, Rajkot. Specializing in Python, Django, and JavaScript. Explore projects like PathSarthi, SkillNest, and Auto Flex.">
-  <meta property="og:image" content="{% if profile and profile.about_image %}{{ profile.about_image.url }}{% endif %}">
+  <meta property="og:image" content="{% if profile and profile.about_image %}{{ profile.about_image }}{% endif %}">
   <meta property="og:url" content="https://vasuchauhan.me/">
 
   <!-- Twitter -->
@@ -79,7 +79,8 @@
 
     h1,
     h2,
-    h3 {
+    h3,
+    h4 {
       font-family: 'Fraunces', serif;
     }
 
@@ -103,30 +104,22 @@
     }
 
     @keyframes glowPulse {
-
       0%,
       100% {
         opacity: 0.4
       }
-
       50% {
         opacity: 1
       }
     }
 
-    /* ── Masonry grid ── */
+    /* ── Pinterest Masonry grid ── */
     .masonry {
       columns: 1;
-      column-gap: 1.25rem;
+      column-gap: 1.5rem;
     }
 
-    @media(min-width: 480px) {
-      .masonry {
-        columns: 2;
-      }
-    }
-
-    @media(min-width: 768px) {
+    @media(min-width: 640px) {
       .masonry {
         columns: 2;
       }
@@ -140,29 +133,43 @@
 
     .masonry-item {
       break-inside: avoid;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Glassmorphism and Effects ── */
+    .glass-card {
+      background: rgba(17, 24, 39, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px border-gray-800/70;
     }
 
     /* ── Project card 3D tilt ── */
     .project-card {
-      transition: transform 0.12s ease-out, box-shadow 0.35s;
+      transition: transform 0.15s ease-out, box-shadow 0.35s, border-color 0.35s;
       will-change: transform;
       transform-style: preserve-3d;
     }
 
     .project-card:hover {
-      box-shadow: 0 20px 60px rgba(168, 85, 247, 0.3);
+      box-shadow: 0 15px 40px rgba(168, 85, 247, 0.2);
     }
 
     /* ── Chat panel ── */
     .chat-panel {
       max-height: 0;
+      opacity: 0;
       overflow: hidden;
-      transition: max-height 0.35s ease;
+      transform: translateY(15px);
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
     }
 
     .chat-panel.open {
-      max-height: 500px;
+      max-height: 480px;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
     }
 
     /* ── Modal ── */
@@ -230,8 +237,8 @@
 
     /* ── About image responsive ── */
     .about-img {
-      width: clamp(10rem, 40vw, 14rem);
-      height: clamp(10rem, 40vw, 14rem);
+      width: clamp(10rem, 30vw, 14rem);
+      height: clamp(10rem, 30vw, 14rem);
     }
   </style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
@@ -240,6 +247,15 @@
 
 <body data-template-id="__page-root"
   class="min-h-screen text-gray-100 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+
+  <!-- Page Loader Overlay -->
+  <div id="page-loader" class="fixed inset-0 z-[100] bg-gray-950 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div class="relative w-12 h-12">
+      <div class="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
+      <div class="absolute inset-0 rounded-full border-4 border-t-purple-600 animate-spin"></div>
+    </div>
+    <span class="text-xs font-semibold text-purple-300 tracking-wider uppercase mt-5 animate-pulse">Loading Vasu's Portfolio</span>
+  </div>
 
   <!-- Ambient background blobs -->
   <div
@@ -253,15 +269,21 @@
   <nav class="fixed top-0 w-full z-50 bg-gray-950/85 backdrop-blur-md border-b border-gray-800/70">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
       <!-- Logo -->
-      <span data-template-id="nav-logo" class="canva-text font-bold text-lg sm:text-xl text-white">
+      <span data-template-id="nav-logo" class="font-bold text-lg sm:text-xl text-white">
         {% if profile %}{{ profile.name }}{% else %}Vasu Chauhan{% endif %}
       </span>
 
       <!-- Desktop links -->
       <div class="hidden md:flex gap-6 lg:gap-8 text-sm font-medium text-gray-300">
         <a href="#about" class="hover:text-purple-400 transition-colors duration-200">About</a>
-        <a href="#skills" class="hover:text-purple-400 transition-colors duration-200">Skills</a>
         <a href="#projects" class="hover:text-purple-400 transition-colors duration-200">Work</a>
+        {% if experiences or educations %}
+        <a href="#journey" class="hover:text-purple-400 transition-colors duration-200">Journey</a>
+        {% endif %}
+        <a href="#skills" class="hover:text-purple-400 transition-colors duration-200">Skills</a>
+        {% if achievements %}
+        <a href="#achievements" class="hover:text-purple-400 transition-colors duration-200">Achievements</a>
+        {% endif %}
         <a href="#connect" class="hover:text-purple-400 transition-colors duration-200">Connect</a>
         <a href="#contact" class="hover:text-purple-400 transition-colors duration-200">Contact</a>
       </div>
@@ -279,10 +301,18 @@
     <div id="mobile-menu" class="md:hidden flex-col bg-gray-950/98 border-t border-gray-800/60 px-4 py-4 gap-1">
       <a href="#about" onclick="closeMobileMenu()"
         class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">About</a>
-      <a href="#skills" onclick="closeMobileMenu()"
-        class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Skills</a>
       <a href="#projects" onclick="closeMobileMenu()"
         class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Work</a>
+      {% if experiences or educations %}
+      <a href="#journey" onclick="closeMobileMenu()"
+        class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Journey</a>
+      {% endif %}
+      <a href="#skills" onclick="closeMobileMenu()"
+        class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Skills</a>
+      {% if achievements %}
+      <a href="#achievements" onclick="closeMobileMenu()"
+        class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Achievements</a>
+      {% endif %}
       <a href="#connect" onclick="closeMobileMenu()"
         class="block px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/60 transition font-medium">Connect</a>
       <a href="#contact" onclick="closeMobileMenu()"
@@ -314,13 +344,13 @@
 
         <!-- Main heading -->
         <h1 data-template-id="hero-title"
-          class="canva-text gradient-text font-black leading-[1.05] text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          class="gradient-text font-black leading-[1.05] text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
           {% if profile %}{{ profile.hero_title }}{% else %}Welcome{% endif %}
         </h1>
 
         <!-- Subtitle -->
         <p data-template-id="hero-subtitle"
-          class="canva-text text-base sm:text-lg md:text-xl text-gray-300 font-medium">
+          class="text-base sm:text-lg md:text-xl text-gray-300 font-medium">
           {% if profile %}{{ profile.hero_subtitle }}{% else %}I build things.{% endif %}
         </p>
 
@@ -333,14 +363,14 @@
         <!-- CTA buttons -->
         <div class="flex flex-wrap gap-3 sm:gap-4 pt-2">
           <a href="#projects" data-template-id="hero-cta"
-            class="canva-button px-6 sm:px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/25 bg-purple-600 hover:bg-purple-500 text-white flex items-center gap-2 text-sm sm:text-base">
+            class="px-6 sm:px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/25 bg-purple-600 hover:bg-purple-500 text-white flex items-center gap-2 text-sm sm:text-base">
             <span>Explore Projects</span>
             <i data-lucide="arrow-right" class="w-4 h-4 shrink-0"></i>
           </a>
           {% if profile and profile.cv_file %}
-          <a href="{{ profile.cv_file.url }}"
-            class="canva-button px-6 sm:px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 hover:bg-gray-800 border border-purple-500/40 text-purple-300 hover:text-white flex items-center gap-2 text-sm sm:text-base"
-            download>
+          <a href="{{ profile.cv_file }}"
+            class="px-6 sm:px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 hover:bg-gray-800 border border-purple-500/40 text-purple-300 hover:text-white flex items-center gap-2 text-sm sm:text-base"
+            download target="_blank">
             <i data-lucide="download" class="w-4 h-4 shrink-0"></i>
             <span>Download CV</span>
           </a>
@@ -381,42 +411,43 @@
     <section id="about" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 reveal">
       <div class="flex flex-col sm:flex-row items-center gap-8 sm:gap-10 lg:gap-14">
         <img data-template-id="about-portrait"
-          src="{% if profile and profile.about_image %}{{ profile.about_image.url }}{% else %}https://via.placeholder.com/256{% endif %}"
-          class="canva-image about-img rounded-2xl object-cover shadow-2xl flex-shrink-0" loading="lazy"
+          src="{% if profile and profile.about_image %}{{ profile.about_image }}{% else %}https://via.placeholder.com/256{% endif %}"
+          class="about-img rounded-2xl object-cover shadow-2xl flex-shrink-0 border border-gray-800" loading="lazy"
           alt="Vasu Chauhan profile photo">
         <div>
-          <h2 data-template-id="about-heading" class="canva-text font-bold text-2xl sm:text-3xl">
+          <h2 data-template-id="about-heading" class="font-bold text-2xl sm:text-3xl">
             {% if profile %}{{ profile.about_heading }}{% else %}About Me{% endif %}
           </h2>
-          <p data-template-id="about-text" class="canva-text mt-4 text-gray-300 leading-relaxed text-sm sm:text-base">
+          <p data-template-id="about-text" class="mt-4 text-gray-300 leading-relaxed text-sm sm:text-base">
             {% if profile %}{{ profile.about_text }}{% else %}I am a student.{% endif %}
           </p>
         </div>
       </div>
     </section>
 
-    <!-- PROJECTS -->
+    <!-- PROJECTS (Pinterest Grid Style) -->
     <section id="projects" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
       <h2 data-template-id="projects-heading"
-        class="canva-text text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-14 reveal">Projects</h2>
+        class="text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-14 reveal">Projects</h2>
       <div class="masonry">
         {% for project in projects %}
         <div class="masonry-item reveal">
           <div class="project-card-wrapper cursor-pointer"
-            onclick="openProjectModal('{{ project.title|escapejs }}', '{% if project.image %}{{ project.image.url|escapejs }}{% elif project.image_url %}{{ project.image_url|escapejs }}{% else %}https://via.placeholder.com/800{% endif %}', '{{ project.description|escapejs }}', '{{ project.tech|escapejs }}', '{{ project.impact|escapejs }}')">
+            onclick="openProjectModal('{{ project.title|escapejs }}', '{% if project.image %}{{ project.image|escapejs }}{% elif project.image_url %}{{ project.image_url|escapejs }}{% else %}https://via.placeholder.com/800{% endif %}', '{{ project.description|escapejs }}', '{{ project.tech|escapejs }}', '{{ project.impact|escapejs }}')">
             <div
-              class="canva-card project-card rounded-2xl overflow-hidden bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 hover:border-purple-500/30 transition-colors duration-300">
+              class="project-card glass-card rounded-2xl overflow-hidden border border-gray-800/70 hover:border-purple-500/40 hover:bg-gray-800/30 transition-all duration-300">
               <div class="relative overflow-hidden">
                 <img
-                  src="{% if project.image %}{{ project.image.url }}{% elif project.image_url %}{{ project.image_url }}{% else %}https://via.placeholder.com/800{% endif %}"
-                  class="canva-image w-full h-44 sm:h-48 object-cover transition-transform duration-500 hover:scale-105"
+                  src="{% if project.image %}{{ project.image }}{% elif project.image_url %}{{ project.image_url }}{% else %}https://via.placeholder.com/800{% endif %}"
+                  class="w-full h-auto max-h-64 object-cover transition-transform duration-500 hover:scale-[1.03]"
                   loading="lazy" alt="{{ project.title }}">
-                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent pointer-events-none">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent pointer-events-none">
                 </div>
               </div>
-              <div class="p-4 sm:p-5">
-                <h3 class="canva-text font-bold text-lg sm:text-xl text-white">{{ project.title }}</h3>
-                <p class="canva-text text-xs sm:text-sm mt-1.5 text-purple-400 font-medium">{{ project.tech }}</p>
+              <div class="p-5">
+                <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors">{{ project.title }}</h3>
+                <p class="text-xs mt-2 text-purple-400 font-semibold tracking-wider uppercase">{{ project.tech }}</p>
+                <p class="text-xs sm:text-sm text-gray-400 mt-2 line-clamp-3 leading-relaxed">{{ project.description }}</p>
               </div>
             </div>
           </div>
@@ -427,18 +458,78 @@
       </div>
     </section>
 
+    <!-- EXPERIENCE & EDUCATION (JOURNEY) -->
+    {% if experiences or educations %}
+    <section id="journey" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
+      <h2 class="text-center text-2xl sm:text-3xl font-bold mb-14 reveal">Education &amp; Experience</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-14 reveal">
+        
+        <!-- Experience Column -->
+        <div class="space-y-8">
+          <h3 class="text-lg sm:text-xl font-bold text-purple-400 border-b border-gray-800 pb-3 flex items-center gap-2">
+            <i data-lucide="briefcase" class="w-5 h-5 text-purple-400"></i> Experience
+          </h3>
+          <div class="relative border-l border-purple-500/20 pl-6 sm:pl-8 space-y-8">
+            {% for exp in experiences %}
+            <div class="relative group">
+              <!-- Timeline node -->
+              <span class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-purple-600 border-4 border-gray-950 group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></span>
+              
+              <div class="glass-card p-5 sm:p-6 border border-gray-800/60 rounded-2xl hover:border-purple-500/30 transition-all duration-300">
+                <span class="text-xs font-bold text-purple-400">{{ exp.start_date }} - {{ exp.end_date }}</span>
+                <h4 class="text-base sm:text-lg font-bold text-white mt-1">{{ exp.role }}</h4>
+                <p class="text-sm font-medium text-gray-300">{{ exp.company }}</p>
+                <p class="text-xs sm:text-sm text-gray-400 mt-3 leading-relaxed whitespace-pre-line">{{ exp.description }}</p>
+              </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-400 text-sm italic pl-2">No professional experience listed yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Education Column -->
+        <div class="space-y-8">
+          <h3 class="text-lg sm:text-xl font-bold text-purple-400 border-b border-gray-800 pb-3 flex items-center gap-2">
+            <i data-lucide="graduation-cap" class="w-5 h-5 text-purple-400"></i> Education
+          </h3>
+          <div class="relative border-l border-purple-500/20 pl-6 sm:pl-8 space-y-8">
+            {% for edu in educations %}
+            <div class="relative group">
+              <!-- Timeline node -->
+              <span class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-purple-600 border-4 border-gray-950 group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></span>
+              
+              <div class="glass-card p-5 sm:p-6 border border-gray-800/60 rounded-2xl hover:border-purple-500/30 transition-all duration-300">
+                <span class="text-xs font-bold text-purple-400">{{ edu.start_date }} - {{ edu.end_date }}</span>
+                <h4 class="text-base sm:text-lg font-bold text-white mt-1">{{ edu.degree }}</h4>
+                <p class="text-sm font-medium text-gray-300">{{ edu.institution }}</p>
+                {% if edu.description %}
+                <p class="text-xs sm:text-sm text-gray-400 mt-3 leading-relaxed">{{ edu.description }}</p>
+                {% endif %}
+              </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-400 text-sm italic pl-2">No education details listed yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+    </section>
+    {% endif %}
+
     <!-- SKILLS -->
     <section id="skills" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
       <h2 data-template-id="skills-heading"
-        class="canva-text text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-14 reveal">Skills</h2>
+        class="text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-14 reveal">Skills</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 reveal" id="skills-container">
         {% for skill in skills %}
         <div class="skill-row">
           <div class="flex justify-between mb-2">
-            <span class="canva-text text-sm font-semibold text-gray-200">{{ skill.name }}</span>
+            <span class="text-sm font-semibold text-gray-200">{{ skill.name }}</span>
             <span class="text-purple-400 text-sm font-bold">{{ skill.percentage }}%</span>
           </div>
-          <div class="w-full h-2 bg-gray-800/60 rounded-full overflow-hidden border border-gray-700/40">
+          <div class="w-full h-2 bg-gray-850 rounded-full overflow-hidden border border-gray-800">
             <div
               class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-purple-500 to-fuchsia-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]"
               data-level="{{ skill.percentage }}"></div>
@@ -450,27 +541,50 @@
       </div>
     </section>
 
+    <!-- ACHIEVEMENTS -->
+    {% if achievements %}
+    <section id="achievements" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 reveal">
+      <h2 class="text-center text-2xl sm:text-3xl font-bold mb-14">Achievements</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for ach in achievements %}
+        <div class="glass-card p-5 sm:p-6 border border-gray-800/60 rounded-2xl hover:border-purple-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-4">
+              <i data-lucide="award" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base sm:text-lg font-bold text-white">{{ ach.title }}</h3>
+            <p class="text-xs sm:text-sm text-gray-400 mt-2 leading-relaxed">{{ ach.description }}</p>
+          </div>
+          {% if ach.date %}
+          <span class="text-[11px] font-semibold text-purple-400/80 tracking-wider uppercase mt-4 block">{{ ach.date }}</span>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
     <!-- CONNECT -->
     <section id="connect" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 reveal">
-      <h2 class="canva-text text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-12">Get Connected</h2>
+      <h2 class="text-center text-2xl sm:text-3xl font-bold mb-10 sm:mb-12">Get Connected</h2>
       <div class="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
         {% if profile.instagram_url %}
         <a href="{{ profile.instagram_url }}" target="_blank" rel="noopener"
-          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/50 backdrop-blur-sm border border-pink-500/30 rounded-2xl hover:bg-pink-900/30 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-pink-400 min-w-[130px] justify-center">
+          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/40 backdrop-blur-sm border border-pink-500/30 rounded-2xl hover:bg-pink-900/20 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-pink-400 min-w-[130px] justify-center">
           <i data-lucide="instagram" class="w-5 h-5 shrink-0"></i>
           <span class="font-semibold text-white text-sm sm:text-base">Instagram</span>
         </a>
         {% endif %}
         {% if profile.linkedin_url %}
         <a href="{{ profile.linkedin_url }}" target="_blank" rel="noopener"
-          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/50 backdrop-blur-sm border border-blue-500/30 rounded-2xl hover:bg-blue-900/30 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-blue-400 min-w-[130px] justify-center">
+          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/40 backdrop-blur-sm border border-blue-500/30 rounded-2xl hover:bg-blue-900/20 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-blue-400 min-w-[130px] justify-center">
           <i data-lucide="linkedin" class="w-5 h-5 shrink-0"></i>
           <span class="font-semibold text-white text-sm sm:text-base">LinkedIn</span>
         </a>
         {% endif %}
         {% if profile.github_url %}
         <a href="{{ profile.github_url }}" target="_blank" rel="noopener"
-          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/50 backdrop-blur-sm border border-gray-500/30 rounded-2xl hover:bg-gray-700/50 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-gray-300 min-w-[130px] justify-center">
+          class="flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-gray-800/40 backdrop-blur-sm border border-gray-500/30 rounded-2xl hover:bg-gray-700/40 hover:scale-105 hover:-translate-y-1 transition-all duration-300 text-gray-300 min-w-[130px] justify-center">
           <i data-lucide="github" class="w-5 h-5 shrink-0"></i>
           <span class="font-semibold text-white text-sm sm:text-base">GitHub</span>
         </a>
@@ -480,32 +594,32 @@
 
     <!-- CONTACT -->
     <section id="contact" class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 reveal">
-      <h2 data-template-id="contact-heading" class="canva-text text-center text-2xl sm:text-3xl font-bold mb-8">Get In
+      <h2 data-template-id="contact-heading" class="text-center text-2xl sm:text-3xl font-bold mb-8">Get In
         Touch</h2>
       <form id="contact-form" class="space-y-5">
         <div>
           <label data-template-id="contact-name-label" for="c-name"
-            class="canva-text block text-sm font-medium mb-2 text-gray-300">Name</label>
-          <input id="c-name" type="text" data-template-id="contact-name-input"
-            class="canva-input w-full px-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 transition-colors duration-200"
+            class="block text-sm font-medium mb-2 text-gray-300">Name</label>
+          <input id="c-name" type="text" data-template-id="contact-name-input" required
+            class="w-full px-4 py-3 rounded-xl bg-gray-800/40 backdrop-blur-sm border border-gray-750 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 transition-colors duration-200"
             placeholder="Your name">
         </div>
         <div>
           <label data-template-id="contact-email-label" for="c-email"
-            class="canva-text block text-sm font-medium mb-2 text-gray-300">Email</label>
-          <input id="c-email" type="email" data-template-id="contact-email-input"
-            class="canva-input w-full px-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 transition-colors duration-200"
+            class="block text-sm font-medium mb-2 text-gray-300">Email</label>
+          <input id="c-email" type="email" data-template-id="contact-email-input" required
+            class="w-full px-4 py-3 rounded-xl bg-gray-800/40 backdrop-blur-sm border border-gray-750 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 transition-colors duration-200"
             placeholder="your@email.com">
         </div>
         <div>
           <label data-template-id="contact-msg-label" for="c-msg"
-            class="canva-text block text-sm font-medium mb-2 text-gray-300">Message</label>
-          <textarea id="c-msg" rows="4"
-            class="w-full px-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 resize-none transition-colors duration-200"
+            class="block text-sm font-medium mb-2 text-gray-300">Message</label>
+          <textarea id="c-msg" rows="4" required
+            class="w-full px-4 py-3 rounded-xl bg-gray-800/40 backdrop-blur-sm border border-gray-750 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-white text-sm placeholder-gray-500 resize-none transition-colors duration-200"
             placeholder="Hello Vasu, I'd love to connect..."></textarea>
         </div>
         <button data-template-id="contact-submit" type="submit"
-          class="canva-button w-full py-3.5 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-500/20 bg-purple-600 hover:bg-purple-500 text-white text-sm sm:text-base">
+          class="w-full py-3.5 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-500/20 bg-purple-600 hover:bg-purple-500 text-white text-sm sm:text-base">
           Send Message
         </button>
       </form>
@@ -550,7 +664,7 @@
 
   <!-- ────────────────── FOOTER ────────────────── -->
   <footer class="w-full border-t border-gray-800/60 py-6 sm:py-8 text-center px-4">
-    <p data-template-id="footer-text" class="canva-text text-xs sm:text-sm text-gray-500">
+    <p data-template-id="footer-text" class="text-xs sm:text-sm text-gray-500">
       &copy; 2026 Vasu Chauhan. All rights reserved &middot; V.V.P. Engineering College, Rajkot
     </p>
   </footer>
@@ -558,26 +672,31 @@
   <!-- ────────────────── CHATBOT ────────────────── -->
   <div id="chatbot" class="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50">
     <!-- Panel — full width on mobile, fixed on larger screens -->
-    <div class="chat-panel bg-gray-900 border border-gray-700 rounded-2xl mb-3 shadow-2xl
+    <div class="chat-panel bg-gray-900/95 backdrop-blur-md border border-gray-750 rounded-2xl mb-3 shadow-2xl
       w-[calc(100vw-2rem)] max-w-xs sm:w-80">
-      <div class="p-4 border-b border-gray-700 flex justify-between items-center">
-        <span data-template-id="chat-title" class="canva-text font-semibold text-sm">
-          💬 Ask Vasu's AI
-        </span>
+      <div class="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-900/40">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+          <span data-template-id="chat-title" class="font-bold text-sm text-white">
+            💬 Ask Vasu's AI
+          </span>
+        </div>
         <button onclick="toggleChat()" class="text-gray-400 hover:text-white p-1">
           <i data-lucide="x" style="width:16px;height:16px"></i>
         </button>
       </div>
-      <div id="chat-messages" class="p-4 space-y-3 max-h-52 sm:max-h-60 overflow-y-auto">
-        <div class="bg-purple-900/40 rounded-xl px-3 py-2 text-sm max-w-[85%]">
-          Hi! 👋 Ask me about Vasu's projects or skills!
+      <div id="chat-messages" class="p-4 space-y-3 max-h-56 sm:max-h-64 overflow-y-auto bg-gray-900/10">
+        <div class="flex flex-col items-start gap-1">
+          <div class="bg-gray-800 border border-gray-700 rounded-2xl rounded-tl-none px-4 py-2.5 text-sm max-w-[85%] text-gray-200">
+            Hi! 👋 Ask me about Vasu's projects, technical skills, experiences, or download his resume!
+          </div>
         </div>
       </div>
-      <div class="p-3 border-t border-gray-700 flex gap-2">
+      <div class="p-3 border-t border-gray-800 flex gap-2 bg-gray-900/30">
         <input id="chat-input" type="text" placeholder="Type a message..."
-          class="flex-1 px-3 py-2 rounded-lg bg-gray-800/60 border border-gray-700 text-sm text-white focus:outline-none focus:border-purple-500 transition-colors min-w-0">
-        <button onclick="sendChat()" class="px-3 py-2 bg-purple-600 rounded-lg hover:bg-purple-500 transition shrink-0">
-          <i data-lucide="send" style="width:16px;height:16px"></i>
+          class="flex-1 px-4 py-2 rounded-xl bg-gray-850 border border-gray-700 text-sm text-white focus:outline-none focus:border-purple-500 transition-colors min-w-0">
+        <button onclick="sendChat()" class="px-3.5 py-2 bg-purple-600 rounded-xl hover:bg-purple-500 transition shrink-0 flex items-center justify-center text-white">
+          <i data-lucide="send" style="width:15px;height:15px"></i>
         </button>
       </div>
     </div>
@@ -590,6 +709,15 @@
 
   <script src="/_sdk/editing_sdk.js"></script>
   <script>
+    // ── Page Loader ──────────────────────────────────
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('page-loader');
+      if (loader) {
+        loader.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => loader.remove(), 500);
+      }
+    });
+
     // ── Mobile nav ──────────────────────────────────
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -820,42 +948,130 @@
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    // ── Contact form ─────────────────────────────────
-    document.getElementById('contact-form').addEventListener('submit', e => {
+    // ── Contact form submission ──────────────────────
+    document.getElementById('contact-form').addEventListener('submit', async e => {
       e.preventDefault();
-      document.getElementById('form-success').classList.remove('hidden');
-      e.target.reset();
+      const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const origBtnText = btn.innerHTML;
+      
+      const name = document.getElementById('c-name').value.trim();
+      const email = document.getElementById('c-email').value.trim();
+      const message = document.getElementById('c-msg').value.trim();
+      const successEl = document.getElementById('form-success');
+      
+      if (!name || !email || !message) return;
+      
+      btn.disabled = true;
+      btn.innerHTML = `<span class="flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Sending...</span>`;
+      lucide.createIcons();
+      successEl.classList.add('hidden');
+      
+      try {
+        const response = await fetch('/contact/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          successEl.classList.remove('hidden');
+          successEl.textContent = "✅ " + (data.reply || "Message sent successfully!");
+          form.reset();
+        } else {
+          alert("Error: " + (data.error || "Failed to send message."));
+        }
+      } catch (err) {
+        alert("Network error occurred. Please try again.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = origBtnText;
+        lucide.createIcons();
+      }
     });
 
-    // ── Chatbot ──────────────────────────────────────
-    function toggleChat() { document.querySelector('.chat-panel').classList.toggle('open'); }
+    // ── Chatbot logic (with History & Mem) ────────────
+    let chatHistory = [];
+
+    function toggleChat() { 
+      document.querySelector('.chat-panel').classList.toggle('open'); 
+    }
 
     async function sendChat() {
       const input = document.getElementById('chat-input');
       const msg = input.value.trim();
       if (!msg) return;
+      
       const c = document.getElementById('chat-messages');
-      c.innerHTML += `<div class="bg-gray-700 rounded-xl px-3 py-2 text-sm ml-auto max-w-[85%] mb-2">${msg}</div>`;
+      
+      // Append user bubble
+      c.innerHTML += `
+        <div class="flex flex-col items-end gap-1 mb-3">
+          <div class="bg-purple-600 rounded-2xl rounded-tr-none px-4 py-2.5 text-sm max-w-[85%] text-white shadow-md">
+            ${msg}
+          </div>
+        </div>
+      `;
       input.value = '';
       c.scrollTop = c.scrollHeight;
+      
+      // Append typing dots
       const typingId = 'typing-' + Date.now();
-      c.innerHTML += `<div id="${typingId}" class="bg-purple-900/40 border border-purple-500/30 rounded-xl px-3 py-2 text-sm max-w-[85%] mb-2 animate-pulse">...</div>`;
+      c.innerHTML += `
+        <div id="${typingId}" class="flex gap-2 items-center mb-3">
+          <div class="bg-gray-800/80 border border-gray-700/50 rounded-2xl rounded-tl-none px-4 py-3 text-sm max-w-[85%] text-gray-300 animate-pulse flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style="animation-delay: 0s"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style="animation-delay: 0.15s"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style="animation-delay: 0.3s"></span>
+          </div>
+        </div>
+      `;
       c.scrollTop = c.scrollHeight;
+      
       try {
         const response = await fetch('/chat/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: msg })
+          body: JSON.stringify({ message: msg, history: chatHistory })
         });
         const data = await response.json();
-        document.getElementById(typingId).remove();
-        c.innerHTML += `<div class="bg-purple-900/40 border border-purple-500/30 rounded-xl px-3 py-2 text-sm max-w-[85%] mb-2">${data.reply}</div>`;
+        
+        const typingEl = document.getElementById(typingId);
+        if (typingEl) typingEl.remove();
+        
+        // Append bot bubble
+        c.innerHTML += `
+          <div class="flex flex-col items-start gap-1 mb-3">
+            <div class="bg-gray-800 border border-gray-700 rounded-2xl rounded-tl-none px-4 py-2.5 text-sm max-w-[85%] text-gray-200 shadow-md leading-relaxed">
+              ${data.reply}
+            </div>
+          </div>
+        `;
         c.scrollTop = c.scrollHeight;
+        
+        // Record to chatHistory
+        chatHistory.push({ role: 'user', text: msg });
+        chatHistory.push({ role: 'model', text: data.reply });
+        
+        // Limit history to last 10 messages
+        if (chatHistory.length > 10) {
+          chatHistory.shift();
+          chatHistory.shift();
+        }
       } catch (err) {
-        document.getElementById(typingId).remove();
-        c.innerHTML += `<div class="bg-red-900/40 text-red-300 rounded-xl px-3 py-2 text-sm max-w-[85%] mb-2">Error connecting to server.</div>`;
+        const typingEl = document.getElementById(typingId);
+        if (typingEl) typingEl.remove();
+        c.innerHTML += `
+          <div class="flex flex-col items-start gap-1 mb-3">
+            <div class="bg-red-950/40 border border-red-500/30 text-red-400 rounded-2xl px-4 py-2 text-sm max-w-[85%] shadow-md">
+              Connection issues. Please try again.
+            </div>
+          </div>
+        `;
+        c.scrollTop = c.scrollHeight;
       }
     }
+
     document.getElementById('chat-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); sendChat(); }
     });
