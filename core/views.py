@@ -37,6 +37,12 @@ def index(request):
     educations = Education.objects.all()
     achievements = Achievement.objects.all()
 
+    cv_download_url = ""
+    if profile and profile.cv_file:
+        cv_download_url = profile.cv_file
+        if "cloudinary.com" in cv_download_url and "/upload/" in cv_download_url:
+            cv_download_url = cv_download_url.replace("/upload/", "/upload/fl_attachment/")
+
     context = {
         'profile': profile,
         'skills': skills,
@@ -44,6 +50,7 @@ def index(request):
         'experiences': experiences,
         'educations': educations,
         'achievements': achievements,
+        'cv_download_url': cv_download_url,
     }
     return render(request, 'core/index.html', context)
 

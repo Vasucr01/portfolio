@@ -367,8 +367,8 @@
             <span>Explore Projects</span>
             <i data-lucide="arrow-right" class="w-4 h-4 shrink-0"></i>
           </a>
-          {% if profile and profile.cv_file %}
-          <a href="{{ profile.cv_file }}"
+          {% if cv_download_url %}
+          <a href="{{ cv_download_url }}"
             class="px-6 sm:px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 hover:bg-gray-800 border border-purple-500/40 text-purple-300 hover:text-white flex items-center gap-2 text-sm sm:text-base"
             download target="_blank">
             <i data-lucide="download" class="w-4 h-4 shrink-0"></i>
