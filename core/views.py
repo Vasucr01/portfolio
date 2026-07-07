@@ -277,3 +277,22 @@ def sitemap_xml(request):
     </url>
 </urlset>'''
     return HttpResponse(sitemap, content_type="application/xml")
+
+
+def download_cv(request):
+    profile = Profile.objects.first()
+    if not profile or not profile.cv_file:
+        return HttpResponse("CV file not found.", status=404)
+
+    cv_url = profile.cv_file
+    try:
+        response = requests.get(cv_url, stream=True)
+        if response.status_code == 200:
+            django_response = HttpResponse(response.content, content_type='application/pdf')
+            django_response['Content-Disposition'] = 'attachment; filename="Vasu_Chauhan_CV.pdf"'
+            return django_response
+    except Exception as e:
+        print("Failed to download CV from source:", e)
+
+    return HttpResponse("Failed to retrieve CV file.", status=500)
+
